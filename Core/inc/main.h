@@ -1,20 +1,12 @@
 #ifndef MAIN_H
 #define MAIN_H
-#include <stdint.h>
 
-/* LED configuration */
+#include "stm32f1xx_hal.h"
+
+/* Blue Pill: user LED on PC13, active-low (on when pin is LOW) */
 #define LED_GPIO_PORT GPIOC
 #define LED_GPIO_PIN GPIO_PIN_13
 
-/* Button configuration */
-#define BUTTON_GPIO_PORT GPIOA
-#define BUTTON_GPIO_PIN GPIO_PIN_0
-
-typedef struct {
-  uint16_t history;
-  uint8_t state;
-} button_t;
-
 void Error_Handler(void);
 
-#endif // !MAIN_H
+#endif
