@@ -147,3 +147,7 @@ Submodules retain their own licenses:
 | STM32CubeF1 | BSD-3-Clause (STMicroelectronics) |
 | FreeRTOS-Kernel | MIT |
 | dapboot | MIT |
+
+[![GitHub](https://img.shields.io/badge/GitHub-black?logo=github)](https://github.com/aydm32)
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
