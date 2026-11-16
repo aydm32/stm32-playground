@@ -148,6 +148,7 @@ Submodules retain their own licenses:
 | FreeRTOS-Kernel | MIT |
 | dapboot | MIT |
 
+Mohamed Ayad
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-blue?logo=linkedin)](https://www.linkedin.com/in/mohamed-ayad-863b00449/?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3By9hqtjIqTbuYSSHZ1QFQDQ%3D%3D)
 [![GitHub](https://img.shields.io/badge/GitHub-black?logo=github)](https://github.com/aydm32)
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
