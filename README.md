@@ -1,4 +1,4 @@
-# stm32 playground (bluepill)
+# stm32 playground
 
 A minimal STM32F1 playground built **without STM32CubeMX**, just a plain `Makefile`.
 Currently contains a blink example: PC13 toggles at 1 Hz.
