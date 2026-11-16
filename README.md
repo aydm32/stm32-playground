@@ -1,7 +1,6 @@
 # stm32 playground (bluepill)
 
 A minimal STM32F1 playground built **without STM32CubeMX**, just a plain `Makefile`.
-
 Currently contains a blink example: PC13 toggles at 1 Hz.
 
 ## Features
@@ -82,8 +81,6 @@ Artifacts:
 | `build/firmware.hex` | Intel HEX |
 | `build/firmware.map` | Linker map |
 
-The build prints a size summary via `arm-none-eabi-size`.
-
 ### 3. Flash
 
 **Via ST-Link:**
@@ -94,7 +91,7 @@ make flash
 
 **Via dapboot USB DFU:**
 
-1. Put the board into DFU mode (hold BOOT, tap RESET).
+1. Put the board into DFU mode (BOOT1 = 1, tap RESET).
 2. Flash:
 
 ```sh
@@ -110,12 +107,6 @@ make clean
 ## Target board
 
 Defaults assume an **STM32F103C8 "Blue Pill"**:
-
-- MCU: `STM32F103xB`, Cortex-M3, 64 KB flash / 20 KB RAM
-- HSE: 8 MHz crystal → PLL ×9 → **72 MHz** SYSCLK
-- User LED: **PC13**, active-low (on when pin is LOW)
-- Button (not currently used): PA0, active-low with internal pull-up
-
 If your board differs, adjust:
 
 - `LED_GPIO_PORT` / `LED_GPIO_PIN` in `Core/inc/main.h`
@@ -145,78 +136,9 @@ HAL modules can be enabled individually by uncommenting the relevant lines in th
 | `RTOS/FreeRTOS-Kernel` | [FreeRTOS/FreeRTOS-Kernel](https://github.com/FreeRTOS/FreeRTOS-Kernel) |
 | `bootloader/dapboot` | [devanlai/dapboot](https://github.com/devanlai/dapboot) |
 
-### Update to latest upstream
-
-```sh
-git submodule update --remote --merge
-git add HAL/STM32CubeF1 RTOS/FreeRTOS-Kernel bootloader/dapboot
-git commit -m "Bump submodules"
-```
-
-### Make a local change inside a submodule
-
-Submodules track a **commit hash**, not files. If you need to patch a submodule, fork it, push your changes there, then point the submodule at your fork:
-
-```sh
-cd RTOS/FreeRTOS-Kernel
-git remote add fork git@github.com:<you>/FreeRTOS-Kernel.git
-git push fork HEAD:main
-cd ../..
-git submodule set-url RTOS/FreeRTOS-Kernel git@github.com:<you>/FreeRTOS-Kernel.git
-git add .gitmodules RTOS/FreeRTOS-Kernel
-git commit -m "Point FreeRTOS-Kernel at fork"
-```
-
-## Firmware notes
-
-### `HAL_Delay()` and `HAL_IncTick()`
-
-`HAL_Delay()` blocks until the SysTick interrupt has advanced `HAL_GetTick()` by the requested number of milliseconds. The SysTick handler must call `HAL_IncTick()`:
-
-```c
-void SysTick_Handler(void) {
-    HAL_IncTick();
-}
-```
-
-If you remove that call, `HAL_Delay()` hangs forever. When you later start FreeRTOS, FreeRTOS owns SysTick and you'll need to restructure this — see below.
-
-### FreeRTOS
-
-The FreeRTOS kernel sources are compiled but `vTaskStartScheduler()` is **not** called yet. Unused code is stripped by `--gc-sections`, so this costs nothing in flash. When you do start the scheduler, also add to `FreeRTOSConfig.h`:
-
-```c
-#define vPortSVCHandler      SVC_Handler
-#define xPortPendSVHandler   PendSV_Handler
-#define xPortSysTickHandler  SysTick_Handler
-```
-
-and move `HAL_IncTick()` out of `SysTick_Handler` (FreeRTOS replaces it).
-
-## Simulation and tests
-
-Host-side tooling lives in `sim/` and `tests/`. These build against stub HAL headers so you can exercise pure logic (debounce, state machines, protocol parsers) on your PC without flashing anything:
-
-```sh
-make -C tests
-```
-
-(Not implemented yet — see git history for plans.)
-
-## Suggested learning path
-
-Each step is a single commit:
-
-1. **Blink** — `HAL_GPIO_TogglePin` + `HAL_Delay`. *(current state)*
-2. **Non-blocking blink** — replace `HAL_Delay` with `HAL_GetTick()` arithmetic.
-3. **Button → LED** — read PA0, debounce with a shift-register filter.
-4. **UART `printf`** — enable USART1, retarget `_write`.
-5. **FreeRTOS tasks** — two tasks, one blinks, one prints.
-6. **dapboot** — flash the bootloader once, update firmware over USB DFU.
-
 ## License
 
-Application code (`Core/`, `Makefile`, etc.): **MIT** — add a `LICENSE` file.
+Application code (`Core/`, `Makefile`, etc.): **MIT**
 
 Submodules retain their own licenses:
 
