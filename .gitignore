@@ -1,0 +1,9 @@
+.cache/
+build/
+compile_commands.json
+*.o
+*.d
+*.elf
+*.bin
+*.hex
+docs/

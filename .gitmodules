@@ -1,0 +1,9 @@
+[submodule "RTOS/FreeRTOS-Kernel"]
+	path = RTOS/FreeRTOS-Kernel
+	url = git@github.com:FreeRTOS/FreeRTOS-Kernel.git
+[submodule "bootloader/dapboot"]
+	path = bootloader/dapboot
+	url = https://github.com/devanlai/dapboot
+[submodule "HAL/STM32CubeF1"]
+	path = HAL/STM32CubeF1
+	url = https://github.com/STMicroelectronics/STM32CubeF1.git

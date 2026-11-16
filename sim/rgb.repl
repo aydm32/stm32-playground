@@ -1,0 +1,15 @@
+using "platforms/cpus/stm32f103.repl"
+
+redLed:   Miscellaneous.LED @ gpioPortB 9
+greenLed: Miscellaneous.LED @ gpioPortB 8
+blueLed:  Miscellaneous.LED @ gpioPortA 0
+
+button: Miscellaneous.Button @ gpioPortA 1
+    -> gpioPortA@1
+
+gpioPortB:
+    9 -> redLed@0
+    8 -> greenLed@0
+
+gpioPortA:
+    0 -> blueLed@0

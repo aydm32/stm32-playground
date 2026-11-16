@@ -1,0 +1,12 @@
+using sysbus
+mach create "bluepill"
+machine LoadPlatformDescription @sim/rgb.repl
+sysbus LoadELF @build/stm32f103-hal-blink.elf
+
+emulation RunFor "0.1"
+sysbus.gpioPortA.button PressAndRelease
+emulation RunFor "0.05"
+sysbus.gpioPortA.button PressAndRelease
+emulation RunFor "0.3"
+sysbus.gpioPortA.button PressAndRelease
+emulation RunFor "0.1"
